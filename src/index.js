@@ -17,32 +17,27 @@ const github = (options) => {
   return new GitHub(runOptions);
 }
 const searchUser = async(options) => {
-
-// unauthenticated client
   
   try {
     
-    let data = await github({
-      debug: true,
-    }).search.users(options)
+    let data = await github().search.users(options)
     if (data && data.items && data.total_count) {
       return data
     }
   } catch (e) {
     console.log(e)
-    return {
-      items: [],
-      total_count: 0,
-    }
+  }
+  return {
+    items: [],
+    total_count: 0,
   }
 }
 const job = async() => {
 
-// unauthenticated client
-  searchUser({
+ let result= await searchUser({
     q: 'followers:>1000'
   })
-  
+  console.log(result.items.length)
 }
 
 job()
