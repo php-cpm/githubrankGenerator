@@ -1,4 +1,5 @@
 import GitHub from 'github';
+import fs from 'fs';
 
 const github = (options) => {
   let defaultOptions = {
@@ -37,7 +38,8 @@ const job = async() => {
  let result= await searchUser({
     q: 'followers:>1000'
   })
-  console.log(result.items.length)
+  //console.log(result.items.length)
+  fs.writeFileSync('./rank/data.json',result)
 }
 
 job()
