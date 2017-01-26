@@ -28,6 +28,7 @@
     "babel-preset-es2015-loose": "^7.0.0",
     "babel-preset-stage-3": "^6.5.0",
     "babel-runtime": "^6.6.1",
+    "git-repository": "^0.1.4",
     "github": "^8.1.1",
     "github-api": "^3.0.0"
   }
