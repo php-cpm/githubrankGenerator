@@ -149,7 +149,7 @@ const saveData = async(data, type = 'master') => {
       // 没有远程分支, 创建一个
       await createEmptyBranch(remote.type, remote.path);
     }
-    fs.writeFileSync(`${remote.path}/data.json`, JSON.stringify(data))
+    fs.writeFileSync(`${remote.path}/data.json`, JSON.stringify(data, null, ' '))
     
     await repo.add('--all .');
     
@@ -165,10 +165,15 @@ const saveUserData = async(opt, type) => {
   let result = await searchUser(opt)
   await saveData(result, type)
 }
+const saveRepoData = async(opt, type) => {
+  
+  let result = await searchRepo(opt)
+  await saveData(result, type)
+}
 
 const searchTopUser = async() => {
   
-  saveUserData(searchList.user[0].opt, searchList.user[0].type)
+  await saveUserData(searchList.user[0].opt, searchList.user[0].type)
 }
 const searchChinaUser = async() => {
   await saveUserData(searchList.user[1].opt, searchList.user[1].type)
@@ -178,31 +183,31 @@ const searchChinaPHPUser = async() => {
 }
 const searchTopOrg = async() => {
   searchList.user[0].opt.q += ' type:org'
-  searchList.user[0].type += ' org'
-  saveUserData(searchList.user[0].opt, searchList.user[0].type)
+  searchList.user[0].type += 'org'
+  await saveUserData(searchList.user[0].opt, searchList.user[0].type)
 }
 const searchChinaOrg = async() => {
   searchList.user[1].opt.q += ' type:org'
-  searchList.user[1].type += ' org'
+  searchList.user[1].type += 'org'
   
   await saveUserData(searchList.user[1].opt, searchList.user[1].type)
 }
 const searchChinaPHPOrg = async() => {
   searchList.user[2].opt.q += ' type:org'
-  searchList.user[2].type += ' org'
+  searchList.user[2].type += 'org'
   
   await saveUserData(searchList.user[2].opt, searchList.user[2].type)
 }
 const searchTopRepo = async() => {
-  saveUserData(searchList.repo[0].opt, searchList.repo[0].type)
+  await saveRepoData(searchList.repo[0].opt, searchList.repo[0].type)
 }
 const searchPHPRepo = async() => {
   
-  await saveUserData(searchList.repo[1].opt, searchList.repo[1].type)
+  await saveRepoData(searchList.repo[1].opt, searchList.repo[1].type)
 }
 const searchJSRepo = async() => {
   
-  await saveUserData(searchList.repo[2].opt, searchList.repo[2].type)
+  await saveRepoData(searchList.repo[2].opt, searchList.repo[2].type)
 }
 export default {
   searchTopUser,

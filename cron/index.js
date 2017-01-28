@@ -3,7 +3,7 @@
  * Created by zouyi on 2017/1/28.
  */
 var CronJob = require('cron').CronJob;
-var job = require('../bin/index')
+var job = require('../bin/index').default;
 var jobs = [
   /**
    Seconds: 0-59
@@ -25,7 +25,7 @@ var jobs = [
   {'cronTime': '00 01 * * * *', 'onTick': job.searchJSRepo},
 ]
 
-for (let i = 0; i < jobs.length; i++) {
-  let job = jobs[i];
-  (new CronJob({cronTime: job['cronTime'], onTick: job['onTick'], start: false, timeZone: 'PRC'})).start();
+for (var i = 0; i < jobs.length; i++) {
+  var work = jobs[i];
+  (new CronJob({cronTime: work['cronTime'], onTick: work['onTick'], start: false, timeZone: 'PRC'})).start();
 }
