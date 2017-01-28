@@ -1,6 +1,8 @@
 import GitHub from 'github';
 import fs from 'fs';
 import Repo from 'git-repository';
+import mkdirp from 'mkdirp';
+import cp from 'child_process';
 
 const exec = (command, args, options) => new Promise((resolve, reject) => {
   let out = '';
@@ -56,41 +58,50 @@ const searchUser = async(options) => {
     total_count: 0,
   }
 }
+
+const saveData = async(data, type = 'master') => {
+  
+  try{
+  
+    let remote = {
+      path: './rank',
+      url: 'git@github.com:php-cpm/githubrank.git',
+      name: 'origin',
+      type: type,
+    }
+    mkdirp.sync(remote.path)
+    let repo = await Repo.open(remote.path, {init: true});
+
+    await repo.setRemote(remote.name, remote.url);
+    // Fetch the remote repository if it exists
+    if ((await repo.hasRef(remote.url, remote.type))) {
+
+      await repo.fetch(remote.type);
+      await gotoBranch(remote.type, remote.path);
+      await repo.reset(`${remote.name}/${remote.type}`, {hard: true});
+      await repo.clean({force: true});
+    } else {
+    
+      // 没有远程分支, 创建一个
+      await createEmptyBranch(remote.type, remote.path);
+    }
+    fs.writeFileSync(`${remote.path}/data.json`, JSON.stringify(data))
+  
+    await repo.add('--all .');
+    
+    await repo.commit(`add ${type} data`);
+    await repo.push('origin', type, {force: true});
+  }catch (e) {
+    console.log(e)
+  }
+}
 const job = async() => {
   
   let result = await searchUser({
     q: 'followers:>1000'
   })
-  
-  await saveData(result.items, 'user')
+  await saveData(result, 'user')
 }
 
-const saveData = async(data, type = 'master') => {
-  
-  let remote = {
-    path: './rank',
-    url: 'git@github.com:php-cpm/githubrank.git',
-    name: 'origin',
-    type: type,
-  }
-  let repo = await Repo.open(remote.path, {init: true});
-  
-  await repo.setRemote(remote.name, remote.url);
-  // Fetch the remote repository if it exists
-  if ((await repo.hasRef(remote.url, remote.type))) {
-    await repo.fetch(remote.name);
-    await gotoBranch(remote.name, remote.path);
-    await repo.reset(`${remote.name}/${remote.type}`, { hard: true });
-    await repo.clean({ force: true });
-  }else {
-    // 没有远程分支, 创建一个
-    createEmptyBranch(remote.name, remote.path);
-  }
-  fs.writeFileSync(`${remote.path}/data.json`, result)
-  
-  await repo.add('--all .');
-  await repo.commit(`add ${type} data`);
-  await repo.push('origin', 'type');
-}
 
 job()
