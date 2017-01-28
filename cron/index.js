@@ -2,8 +2,10 @@
  * File: index
  * Created by zouyi on 2017/1/28.
  */
+require("babel-core/register");
+require("babel-polyfill");
 var CronJob = require('cron').CronJob;
-var job = require('../bin/index').default;
+var job = require('../bin/index');
 var jobs = [
   /**
    Seconds: 0-59

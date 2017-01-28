@@ -123,7 +123,7 @@ const searchRepo = async(options) => {
   }
 }
 
-const saveData = async(data, type = 'master') => {
+const saveData = async (data, type = 'master') => {
   
   try {
     
