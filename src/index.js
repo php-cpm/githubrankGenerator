@@ -140,7 +140,7 @@ const saveData = async (data, type = 'master') => {
     // Fetch the remote repository if it exists
     if ((await repo.hasRef(remote.url, remote.type))) {
       
-      await repo.fetch(remote.type);
+      await repo.fetch(remote.name);
       await gotoBranch(remote.type, remote.path);
       await repo.reset(`${remote.name}/${remote.type}`, {hard: true});
       await repo.clean({force: true});
