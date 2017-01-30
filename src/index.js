@@ -182,21 +182,20 @@ const searchChinaPHPUser = async() => {
   await saveUserData(searchList.user[2].opt, searchList.user[2].type)
 }
 const searchTopOrg = async() => {
-  searchList.user[0].opt.q += ' type:org'
-  searchList.user[0].type += 'org'
-  await saveUserData(searchList.user[0].opt, searchList.user[0].type)
+  let opt = {q: searchList.user[0].opt.q + ' type:org'}
+  let type = searchList.user[0].type + 'org'
+  await saveUserData(opt, type)
 }
 const searchChinaOrg = async() => {
-  searchList.user[1].opt.q += ' type:org'
-  searchList.user[1].type += 'org'
-  
-  await saveUserData(searchList.user[1].opt, searchList.user[1].type)
+  let opt = {q: searchList.user[1].opt.q + ' type:org'}
+  let type = searchList.user[1].type + 'org'
+  await saveUserData(opt, type)
 }
 const searchChinaPHPOrg = async() => {
-  searchList.user[2].opt.q += ' type:org'
-  searchList.user[2].type += 'org'
+  let opt = {q: searchList.user[2].opt.q + ' type:org'}
+  let type = searchList.user[2].type + 'org'
+  await saveUserData(opt, type)
   
-  await saveUserData(searchList.user[2].opt, searchList.user[2].type)
 }
 const searchTopRepo = async() => {
   await saveRepoData(searchList.repo[0].opt, searchList.repo[0].type)
